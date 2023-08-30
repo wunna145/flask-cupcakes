@@ -9,7 +9,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///cupcakes'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = "hungry"
 
-CORS(app)
+cors = CORS(app) 
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 connect_db(app)
 
@@ -17,8 +18,9 @@ connect_db(app)
 def root():
     return render_template('index.html')
 
-@app.route("/api/cupcakes")
+@app.route("/api/cupcakes", methods=["GET"])
 def list_cupcakes():
+    print("in list cupcakes")
     cupcakes = [cupcake.to_dict() for cupcake in Cupcake.query.all()]
     return jsonify(cupcakes=cupcakes)
 
